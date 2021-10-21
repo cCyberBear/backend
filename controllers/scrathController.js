@@ -31,6 +31,9 @@ exports.scrath = catchAsync(async (req, res) => {
         const PE = $(".text-right").eq(17).text();
         const PB = $(".text-right").eq(18).text();
         let news = "";
+        if (!name) {
+          throw new ApiError(404, "Symbol not found");
+        }
         request(
           `https://www.stockbiz.vn/Stocks/HPG/Overview.aspx`,
           (err, resp, body) => {
