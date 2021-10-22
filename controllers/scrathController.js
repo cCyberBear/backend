@@ -57,7 +57,11 @@ exports.scrath = catchAsync(async (req, res) => {
 exports.all = catchAsync(async (req, res) => {
   const browser = await puppeteer.launch({
     headless: true,
-    defaultViewport: null,
+    args: chromium.args,
+    defaultViewport: chromium.defaultViewport,
+    executablePath: await chromium.executablePath,
+    headless: chromium.headless,
+    ignoreHTTPSErrors: true,
     args: [
       "--incognito",
       "--no-sandbox",
