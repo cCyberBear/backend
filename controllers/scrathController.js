@@ -58,7 +58,7 @@ exports.all = catchAsync(async (req, res) => {
   const browser = await puppeteer.launch({
     // a trick to run headless with GPU enabled.
     headless: false,
-    args: ["--headless"],
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
   });
   const page = await browser.newPage();
   await page.goto("https://banggia.vndirect.com.vn/chung-khoan/vn30", {
