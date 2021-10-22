@@ -58,7 +58,13 @@ exports.all = catchAsync(async (req, res) => {
   const browser = await puppeteer.launch({
     headless: true,
     defaultViewport: null,
-    args: ["--incognito", "--no-sandbox", "--single-process", "--no-zygote"],
+    args: [
+      "--incognito",
+      "--no-sandbox",
+      "--single-process",
+      "--no-zygote",
+      "--disable-setuid-sandbox",
+    ],
   });
   const page = await browser.newPage();
   await page.goto("https://banggia.vndirect.com.vn/chung-khoan/vn30", {
