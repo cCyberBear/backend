@@ -56,9 +56,9 @@ exports.scrath = catchAsync(async (req, res) => {
 
 exports.all = catchAsync(async (req, res) => {
   const browser = await puppeteer.launch({
-    // a trick to run headless with GPU enabled.
-    headless: false,
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    headless: true,
+    defaultViewport: null,
+    args: ["--incognito", "--no-sandbox", "--single-process", "--no-zygote"],
   });
   const page = await browser.newPage();
   await page.goto("https://banggia.vndirect.com.vn/chung-khoan/vn30", {
