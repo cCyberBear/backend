@@ -11,6 +11,7 @@ const Book = require("../modeljs/book");
 const url = require("url");
 
 const createPassword = require("../utils/CreatePassword");
+const { env } = require("process");
 
 exports.register = catchAsync(async (req, res) => {
   const { name, email, password, age, role } = req.body;
@@ -81,7 +82,7 @@ exports.forgotPassword = catchAsync(async (req, res) => {
     }).save();
   }
 
-  const link = `http://localhost:3000/auth-info/password-reset/${user._id}/${token.token}`;
+  const link = `${process.env.MAIN_URL}auth-info/password-reset/${user._id}/${token.token}`;
 
   await MailSevice.sendMail(user.email, "Password reset", link);
   res.status(200).json({
