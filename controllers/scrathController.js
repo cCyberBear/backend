@@ -67,7 +67,7 @@ exports.all = catchAsync(async (req, res) => {
     ],
   });
   const page = await browser.newPage();
-  await page.goto("https://banggia.vndirect.com.vn/chung-khoan/vn30", {
+  await page.goto("https://banggia.vndirect.com.vn/chung-khoan/hose", {
     waitUntil: "networkidle2",
   });
   const body = await page.content();

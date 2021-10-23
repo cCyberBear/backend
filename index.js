@@ -8,6 +8,7 @@ const authRouter = require("./routes/authRoute");
 const categoryRoute = require("./routes/categoryRoute");
 const MailSevice = require("./utils/MailService");
 const scrathRoute = require("./routes/scrathRoute");
+const { limiter } = require("./middlewares/rateLimit");
 
 MailSevice.init();
 

@@ -1,12 +1,13 @@
 const express = require("express");
 
 const AUTH = require("../controllers/authController");
+const { basicAuth } = require("../middlewares/basicAuth");
 const { jwtAuth } = require("../middlewares/jwtAuth");
 
 const router = express.Router();
 
 router.post("/register", AUTH.register);
-router.post("/login", AUTH.login);
+router.post("/login", basicAuth, AUTH.login);
 
 // router.get("/news", AUTH.news);
 router.patch("/updatepassword", jwtAuth, AUTH.updatePassword);
