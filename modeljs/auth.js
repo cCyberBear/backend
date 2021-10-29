@@ -30,6 +30,25 @@ const AuthSchema = new Schema(
       type: Number,
       required: [true, "age is required"],
     },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
+    loginAttempts: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    lockUntil: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    lastWrong: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
     books: [String],
   },
   {
@@ -38,12 +57,38 @@ const AuthSchema = new Schema(
   }
 );
 
-// AuthSchema.pre("updateOne", function (next) {
-//   const salt = bcrypt.genSaltSync();
-//   const hashedPassword = bcrypt.hashSync(this.getUpdate().password, salt);
-//   this.password = hashedPassword;
-//   next();
-// });
+AuthSchema.methods.unlockAccount = async function () {
+  if (this.lockUntil && this.lockUntil <= Date.now()) {
+    await this.updateOne({ isActive: true, loginAttempts: 0, lockUntil: 0 });
+  }
+};
+
+AuthSchema.methods.resettingAccount = async function () {
+  await this.updateOne({ isActive: true, loginAttempts: 0, lockUntil: 0 });
+};
+AuthSchema.methods.lockAccount = async function (time, range, seconds) {
+  const miliseconds = seconds * 1000;
+  const rangeSeconds = range * 1000;
+
+  if (this.loginAttempts >= time && this.isActive === true) {
+    await this.updateOne({
+      isActive: false,
+      lockUntil: Date.now() + miliseconds,
+    });
+  } else if (
+    this.lastWrong !== 0 &&
+    this.lastWrong + rangeSeconds < Date.now()
+  ) {
+    await this.updateOne({ loginAttempts: 1, lastWrong: 0 });
+    return time;
+  } else {
+    await this.updateOne({
+      loginAttempts: this.loginAttempts + 1,
+      lastWrong: Date.now(),
+    });
+  }
+  return time - this.loginAttempts;
+};
 
 AuthSchema.pre("save", function (next) {
   if (this.isModified("password")) {
@@ -51,8 +96,9 @@ AuthSchema.pre("save", function (next) {
     const hashedPassword = bcrypt.hashSync(this.password, salt);
     this.password = hashedPassword;
     next();
+  } else {
+    next();
   }
-  next();
 });
 
 mongoose.set("runValidators", true);

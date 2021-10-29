@@ -7,6 +7,7 @@ const tokenSchema = new Schema(
       type: Schema.Types.ObjectId,
       required: true,
       ref: "Auth",
+      ref: "User",
     },
     token: {
       type: String,
@@ -20,7 +21,7 @@ const tokenSchema = new Schema(
 );
 
 tokenSchema.index(
-  { createAt: 1 },
+  { createdAt: 1 },
   { expireAfterSeconds: +process.env.TOKEN_EXPIRED }
 );
 module.exports = mongoose.model("token", tokenSchema);

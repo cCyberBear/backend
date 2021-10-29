@@ -19,7 +19,6 @@ exports.createBook = catchAsync(async (req, res) => {
     data: book,
   });
 });
-
 exports.getBook = catchAsync(async (req, res) => {
   const book = await Book.find({}).populate(
     "author-detail category",
@@ -41,7 +40,6 @@ exports.getBookDetail = catchAsync(async (req, res) => {
     data: book,
   });
 });
-
 exports.updateBook = catchAsync(async (req, res) => {
   const { id } = req.params;
   const { title, description, price } = req.body;
@@ -56,7 +54,6 @@ exports.updateBook = catchAsync(async (req, res) => {
     data: book,
   });
 });
-
 exports.deleteBook = catchAsync(async (req, res) => {
   const { id } = req.params;
   const author = req.user.email;
