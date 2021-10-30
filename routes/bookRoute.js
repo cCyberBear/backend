@@ -12,8 +12,8 @@ router.get("/:id", jwtAuth, BOOK.getBookDetail);
 
 router.post("/", jwtAuth, BOOK.createBook);
 
-router.patch("/:id", BOOK.updateBook);
+router.patch("/:id", jwtAuth, BOOK.updateBook);
 
-router.delete("/:id", BOOK.deleteBook);
+router.delete("/:id", jwtAuth, BOOK.deleteBook);
 
 module.exports = router;

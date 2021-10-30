@@ -57,7 +57,7 @@ exports.updateBook = catchAsync(async (req, res) => {
 exports.deleteBook = catchAsync(async (req, res) => {
   const { id } = req.params;
   const author = req.user.email;
-  await Book.deleteOne({ _id: id, author });
+  const book = await Book.deleteOne({ _id: id, author });
   res.json({
     success: true,
     deleted: book,

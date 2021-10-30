@@ -18,7 +18,7 @@ const app = express();
 
 app.use(express.json());
 
-Mongo.upload();
+Mongo.conect();
 
 app.use("/book-info", bookRouter);
 
