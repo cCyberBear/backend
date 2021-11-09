@@ -1,9 +1,7 @@
 const mongoose = require("mongoose");
 
 class Mongo {
-  constructor() {
-    this.gridfs = null;
-  }
+  gridfs = null;
   static conect = () => {
     mongoose
       .connect(process.env.MONGO_URL)

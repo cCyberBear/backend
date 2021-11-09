@@ -1,16 +1,24 @@
 require("dotenv").config();
 const express = require("express");
+const cors = require("cors");
 
-const conectDB = require("./config/db");
 const catchError = require("./middlewares/error");
 const bookRouter = require("./routes/bookRoute");
 const authRouter = require("./routes/authRoute");
 const userRouter = require("./routes/userRoute");
+const fileRouter = require("./routes/fileRoute");
 const categoryRoute = require("./routes/categoryRoute");
 const MailSevice = require("./utils/MailService");
 const scrathRoute = require("./routes/scrathRoute");
-const upload = require("./middlewares/upload");
+const uploadMongo = require("./middlewares/uploadMongo");
 const Mongo = require("./config/db");
+
+const mysql_userRouter = require("./routes/mysql/userRoute");
+const mysql_authRouter = require("./routes/mysql/authRoute");
+const mysql_bookRouter = require("./routes/mysql/bookRoute");
+
+const db = require("./modeljs/mysql/model");
+db.sequelize.sync();
 
 MailSevice.init();
 
@@ -18,31 +26,33 @@ const app = express();
 
 app.use(express.json());
 
+app.use(cors());
+
 Mongo.conect();
 
 app.use("/book-info", bookRouter);
-
 app.use("/auth-info", authRouter);
-
 app.use("/user-info", userRouter);
-
+app.use("/file", fileRouter);
 app.use("/category", categoryRoute);
-
 app.use("/scrath", scrathRoute);
+
+app.use("/api/v1/mysql/user", mysql_userRouter);
+app.use("/api/v1/mysql/auth", mysql_authRouter);
+app.use("/api/v1/mysql/book", mysql_bookRouter);
 
 app.use(
   "/test",
-  upload.fields([
-    { name: "avatar", maxCount: 1 },
-    { name: "image", maxCount: 1 },
+  uploadMongo.fields([
+    { name: "avatar", maxCount: 2 },
+    { name: "image", maxCount: 2 },
   ]),
-  (req, res) => {
+  async (req, res) => {
     if (req.file) {
-      res.json({
+      return res.json({
         success: true,
         message: `upload successfully 1 file"}`,
       });
-      eturn;
     }
     //req.file: 1 file
     //req.files: nhieuf files
@@ -51,7 +61,10 @@ app.use(
     if (req.files.length) {
       len = req.files.length;
     } else {
-      len = Object.keys(req.files).reduce((acc, val) => acc + val.length, 0);
+      len = Object.keys(req.files).reduce(
+        (acc, val) => acc + req.files[val].length,
+        0
+      );
     }
 
     res.json({

@@ -1,6 +1,7 @@
 const multer = require("multer");
 const path = require("path");
 const { GridFsStorage } = require("multer-gridfs-storage");
+const { nanoid } = require("nanoid");
 
 const fileFilter = (req, file, cb) => {
   //check extension trc khi upload
@@ -17,7 +18,13 @@ const fileFilter = (req, file, cb) => {
 
 const storage = new GridFsStorage({
   url: process.env.MONGO_URL,
+  file: (req, file) => {
+    return {
+      filename: `${nanoid(32)}${path.extname(file.originalname)}`,
+      bucketName: process.env.BUCKET_NAME,
+    };
+  },
 });
 
 const mongoUpload = multer({ storage, fileFilter });
-module.exports = uploadMongo;
+module.exports = mongoUpload;

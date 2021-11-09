@@ -9,6 +9,7 @@ const router = express.Router();
 
 router.post("/register", AUTH.register);
 router.post("/login", basicAuth, AUTH.login);
+
 router.patch("/updatepassword", jwtAuth, AUTH.updatePassword);
 router.post("/forgotpassword", AUTH.forgotPassword);
 router.post("/password-reset/:id/:token", AUTH.passwordReset);

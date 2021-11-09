@@ -21,6 +21,7 @@ exports.register = catchAsync(async (req, res) => {
     data: auth,
   });
 });
+
 exports.login = catchAsync(async (req, res) => {
   const { email, password } = req.body;
   const isExisted = await Auth.findOne({ email });

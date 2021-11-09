@@ -6,7 +6,6 @@ const fileFilter = (req, file, cb) => {
   const allowed = [".jpg", ".png", ".gif", ".jpeg"];
   const fileExtension = path.extname(file.originalname);
   const regex = new RegExp(`(${allowed.join("|")})$`, "i");
-
   if (regex.test(fileExtension)) {
     cb(null, true);
   } else {
