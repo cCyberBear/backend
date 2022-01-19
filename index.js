@@ -11,6 +11,9 @@ const categoryRoute = require("./routes/categoryRoute");
 const MailSevice = require("./utils/MailService");
 const scrathRoute = require("./routes/scrathRoute");
 const uploadMongo = require("./middlewares/uploadMongo");
+const swaggerUI = require("swagger-ui-express");
+const swaggerJsDoc = require("swagger-jsdoc");
+
 const Mongo = require("./config/db");
 
 const mysql_userRouter = require("./routes/mysql/userRoute");
@@ -18,6 +21,8 @@ const mysql_authRouter = require("./routes/mysql/authRoute");
 const mysql_bookRouter = require("./routes/mysql/bookRoute");
 
 const db = require("./modeljs/mysql/model");
+
+const options = require("./swagger/options");
 db.sequelize.sync();
 
 MailSevice.init();
@@ -29,6 +34,8 @@ app.use(express.json());
 app.use(cors());
 
 Mongo.conect();
+const specify = swaggerJsDoc(options);
+app.use("/docs", swaggerUI.serve, swaggerUI.setup(specify));
 
 app.use("/book-info", bookRouter);
 app.use("/auth-info", authRouter);

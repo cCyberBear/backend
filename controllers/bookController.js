@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const Book = require("../modeljs/book");
 const catchAsync = require("../middlewares/async");
 const ApiError = require("../utils/ApiError");
+const { pick } = require("../utils/pick");
 
 exports.createBook = catchAsync(async (req, res) => {
   const { title, description, price, category } = req.body;
@@ -19,16 +20,22 @@ exports.createBook = catchAsync(async (req, res) => {
     data: book,
   });
 });
+
 exports.getBook = catchAsync(async (req, res) => {
-  const book = await Book.find({}).populate(
-    "author-detail category",
-    "name description -_id"
-  );
+  // const book = await Book.find({}).populate(
+  //   "author-detail category",
+  //   "name description -_id"
+  // );
+  const books = await Book.paginate({}, pick(req));
+  const book = books.docs;
+  delete books.docs;
   res.json({
     success: true,
     data: book,
+    paginate: books,
   });
 });
+
 exports.getBookDetail = catchAsync(async (req, res) => {
   const { id } = req.params;
   const book = await Book.findById(id);

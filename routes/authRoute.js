@@ -8,7 +8,7 @@ const { authorize } = require("../middlewares/authorize");
 const router = express.Router();
 
 router.post("/register", AUTH.register);
-router.post("/login", basicAuth, AUTH.login);
+router.post("/login", AUTH.login);
 
 router.patch("/updatepassword", jwtAuth, AUTH.updatePassword);
 router.post("/forgotpassword", AUTH.forgotPassword);

@@ -103,7 +103,7 @@ exports.passwordReset = catchAsync(async (req, res) => {
 exports.getDetail = catchAsync(async (req, res) => {
   const { email } = req.user;
   const user = await User.findOne({ email }).select("-password -_id");
-  res.status(201).json({
+  res.status(200).json({
     success: true,
     user,
   });

@@ -7,7 +7,7 @@ const ApiError = require("../utils/ApiError");
 exports.createCategory = catchAsync(async (req, res) => {
   const { name, description } = req.body;
   const category = await Category.create({ name, description });
-  res.status(201).json({
+  res.status(200).json({
     success: true,
     data: category,
   });

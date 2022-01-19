@@ -71,7 +71,7 @@ exports.updatePassword = catchAsync(async (req, res) => {
   }
   const isMatch = bcrypt.compareSync(oldPassword, user.password);
   if (!isMatch) {
-    throw new ApiError(404, "old password does not match");
+    throw new ApiError(400, "Old password does not match");
   }
   user.password = newPassword;
   await user.save();
